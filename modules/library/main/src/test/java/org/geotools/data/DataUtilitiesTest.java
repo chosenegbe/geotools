@@ -46,8 +46,7 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.geotools.util.factory.Hints;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.*;
 import org.opengis.feature.IllegalAttributeException;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -502,6 +501,20 @@ public class DataUtilitiesTest extends DataTestCase {
         assertNull(DataUtilities.defaultValue(roadType.getDescriptor("name")));
         assertNull(DataUtilities.defaultValue(roadType.getDescriptor("id")));
         assertNull(DataUtilities.defaultValue(roadType.getDescriptor("geom")));
+
+        assertNotNull(DataUtilities.defaultValue(Point.class));
+        assertNotNull(DataUtilities.defaultValue(LineString.class));
+        assertNotNull(DataUtilities.defaultValue(LinearRing.class));
+        assertNotNull(DataUtilities.defaultValue(MultiPoint.class));
+        assertNotNull(DataUtilities.defaultValue(Polygon.class));
+        assertNotNull(DataUtilities.defaultValue(MultiLineString.class));
+
+        GeometryFactory fac = new GeometryFactory();
+        Coordinate coordinate = new Coordinate(0, 0);
+        Point point = fac.createPoint(coordinate);
+
+        Geometry geometry = fac.createGeometry(point);
+        assertEquals(geometry, DataUtilities.defaultValue(Geometry.class));
     }
 
     public void testDefaultValueArray() throws Exception {
